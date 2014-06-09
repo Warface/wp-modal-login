@@ -1,3 +1,7 @@
+# No Longer Supported
+Sadly I cannot continue to support this plugin. I'm looking to be able to hand this fun plugin off to any one with the availability! Let me know and we'll work out the details. Thanks!
+
+
 WordPress Modal Login!
 ==============
 

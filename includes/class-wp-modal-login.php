@@ -94,7 +94,7 @@
 		public function print_custom_css() {
 			global $wpml_settings;
 
-			echo '<style text="text/css">' . sanitize_text_field( $wpml_settings['custom-css'] ) . "</style>\n";
+			echo '<style type="text/css">' . sanitize_text_field( $wpml_settings['custom-css'] ) . "</style>\n";
 		}
 
 

@@ -291,14 +291,16 @@
 			else if ( is_wp_error( $allow ) )
 				return $allow;
 
-			$key = $wpdb->get_var( $wpdb->prepare( "SELECT user_activation_key FROM $wpdb->users WHERE user_login = %s", $user_login ) );
-			if ( empty( $key ) ) {
-				// Generate something random for a key...
-				$key = wp_generate_password( 20, false );
-				do_action( 'retrieve_password_key', $user_login, $key );
-				// Now insert the new md5 key into the db
-				$wpdb->update( $wpdb->users, array( 'user_activation_key' => $key ), array( 'user_login' => $user_login ) );
+			$key = wp_generate_password( 20, false );
+			do_action( 'retrieve_password_key', $user_login, $key );
+
+			if ( empty( $wp_hasher ) ) {
+				require_once ABSPATH . 'wp-includes/class-phpass.php';
+				$wp_hasher = new PasswordHash( 8, true );
 			}
+			$hashed = $wp_hasher->HashPassword( $key );
+			$wpdb->update( $wpdb->users, array( 'user_activation_key' => $hashed ), array( 'user_login' => $user_login ) );
+			
 			$message = __( 'Someone requested that the password be reset for the following account:', 'geisinger-wpml' ) . "\r\n\r\n";
 			$message .= network_home_url( '/' ) . "\r\n\r\n";
 			$message .= sprintf( __( 'Username: %s' ), $user_login ) . "\r\n\r\n";
